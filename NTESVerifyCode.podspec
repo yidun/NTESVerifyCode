@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "NTESVerifyCode"
-  spec.version      = "0.0.3"
+  spec.version      = "0.0.4"
   spec.summary      = "NTESVerifyCode."
 
   # This description is used to generate tags and improve search results.
@@ -120,9 +120,7 @@ Pod::Spec.new do |spec|
   
   spec.vendored_frameworks = ["Classes/VerifyCode.framework"]
   
-  spec.resource_bundle = {
-        'NTESVerifyCode' => ["Assets/NTESVerifyCodeResources.bundle"]
-    }
+  spec.resource = "Assets/NTESVerifyCodeResources.bundle"
 
   # spec.library   = "iconv"
   # spec.libraries = "iconv", "xml2"
