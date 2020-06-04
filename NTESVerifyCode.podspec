@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "NTESVerifyCode"
-  spec.version      = "1.1"
+  spec.version      = "3.2.5"
   spec.summary      = "NTESVerifyCode."
 
   # This description is used to generate tags and improve search results.
