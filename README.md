@@ -137,21 +137,9 @@ platform :ios, '8.0'
 		/**
  		* 关闭验证码窗口后的回调
  		*/
-		- (void)verifyCodeCloseWindow{
+		- (void)verifyCodeCloseWindow:(NTESVerifyCodeClose)close{
     		//App添加自己的处理逻辑
 		}
-
- (5) 网络错误
-		
-		/**
- 		* 网络错误
- 		* @param error 网络错误信息，建议直接打印错误码，便于排查问题
- 		*/
-		- (void)verifyCodeNetError:(NSError *)error{
-    		//App添加自己的处理逻辑
-		}
-     
-       __备注:__  如果不需要处理VerifyCode SDK的回调信息，也可不实现
        
 
 ### Swift 工程
@@ -229,6 +217,17 @@ platform :ios, '8.0'
 		    // 无感知验证码
 		    NTESVerifyCodeBind,
 		};
+        
+        /**
+        * @abstract    验证码关闭的类型
+        */
+        typedef NS_ENUM(NSInteger, NTESVerifyCodeClose) {
+            // 手动关闭
+            NTESVerifyCodeCloseManual = 1,
+            // 验证完毕后自动关闭
+            NTESVerifyCodeCloseAuto,
+        };
+
 
 2.属性
 		
@@ -381,6 +380,32 @@ platform :ios, '8.0'
 		* @abstract    验证码SDK版本号
 		*/
 		- (NSString *)getSDKVersion;
+
+
+8.自定义loading文案
+ 
+    /**
+     *  @abstract   自定义loading文案
+     *
+     *  @param      loadingText  加载中的文案
+     *
+     */
+    - (void)configLoadingText:(NSString * _Nullable)loadingText;
+
+9.自定义loading图片， 支持gif、 png 、 jpg等格式。
+
+    /**
+     *  @abstract  自定义loading图片， 支持gif、 png 、 jpg等格式。
+     *
+     *  @说明      自定义 loading图片的参数配置。
+     *            (1) 图片格式为 gif 只需要传gifData 即可， animationImage传空。
+     *            (2) 图片格式为 png、 jpg时，需要配置animationImage ,gitData传空。
+     *
+     *  @param      animationImage  单张图片 ，
+     *  @param      gifData 图片格式为gif的二进制数据
+     */
+	- (void)configLoadingImage:(UIImage *_Nullable)animationImage
+                   gifData:(NSData *_Nullable)gifData;
 		
 ## 错误码定义
 

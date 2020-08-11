@@ -79,6 +79,16 @@ typedef NS_ENUM(NSInteger, NTESVerifyCodeProtocol) {
     NTESVerifyCodeProtocolHttp,
 };
 
+/**
+* @abstract    验证码关闭的类型
+*/
+typedef NS_ENUM(NSInteger, NTESVerifyCodeClose) {
+    // 手动关闭
+    NTESVerifyCodeCloseManual = 1,
+    // 验证完毕后自动关闭
+    NTESVerifyCodeCloseAuto,
+};
+
 @protocol NTESVerifyCodeManagerDelegate<NSObject>
 @optional
 
@@ -106,15 +116,10 @@ typedef NS_ENUM(NSInteger, NTESVerifyCodeProtocol) {
 
 /**
  * 关闭验证码窗口后的回调
- */
-- (void)verifyCodeCloseWindow;
-
-/**
- * 网络错误
  *
- * @param error 网络错误信息
+ * @param close 关闭的类型
  */
-- (void)verifyCodeNetError:(NSError *)error;
+- (void)verifyCodeCloseWindow:(NTESVerifyCodeClose)close;
 
 @end
 
@@ -242,6 +247,29 @@ typedef NS_ENUM(NSInteger, NTESVerifyCodeProtocol) {
  */
 - (void)configureVerifyCode:(NSString *)captcha_id
                     timeout:(NSTimeInterval)timeoutInterval;
+
+/**
+ *  @abstract   自定义loading文案
+ *
+ *  @param      loadingText  加载中的文案
+ *
+ */
+- (void)configLoadingText:(NSString * _Nullable)loadingText;
+
+/**
+ *  @abstract  自定义loading图片， 支持gif、 png 、 jpg等格式。
+ *
+ *  @说明              自定义 loading图片的参数配置。
+ *            (1) 图片格式为 gif 只需要传gifData 即可， animationImage传空。
+ *            (2) 图片格式为 png、 jpg时，需要配置animationImage ,gitData传空。
+ *
+ *  @param      animationImage  单张图片 ，
+ *  @param      gifData 图片格式为gif的二进制数据
+
+
+ */
+- (void)configLoadingImage:(UIImage *_Nullable)animationImage
+                   gifData:(NSData *_Nullable)gifData;
 
 /**
  *  @abstract   展示验证码视图
