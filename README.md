@@ -238,8 +238,7 @@ platform :ios, '8.0'
  		*              (2)如果传递,则frame的宽度至少为270;高度至少为:宽度/2.0 + 65.
  		*/
 		@property(nonatomic) CGRect            frame;
-
-- 
+-
 
 		/**
 	 	* @abstract    验证码图片背景的透明度
@@ -257,7 +256,9 @@ platform :ios, '8.0'
 
 - 
 
-		/**
+		
+        
+        /**
  		 * @abstract    验证码语言选项
 		 * @说明         验证码枚举类型NTESVerifyCodeLang，NTESVerifyCodeLangCN表示中文，NTESVerifyCodeLangEN表示英文
  		 *              不传默认中文。
@@ -266,14 +267,18 @@ platform :ios, '8.0'
 		 
 - 
 	 
-		/**
+		
+       
+       /**
  		* @abstract    验证码滑块icon url，不传则使用易盾默认滑块显示。
  		*/
 		@property(nonatomic) NSString *slideIconURL;
 
 - 
 
-		/**
+		
+        
+        /**
 		 * @abstract    验证码验证成功的滑块icon url，不传则使用易盾默认滑块显示。
 		 */
 		@property(nonatomic) NSString *slideIconSuccessURL;		
@@ -287,7 +292,9 @@ platform :ios, '8.0'
 		
 - 
 
-		 /**
+		
+        
+        /**
 		 * @abstract    设置验证码类型
 		 * @说明         验证码枚举类型NTESVerifyCodeMode，可选类型见枚举定义
 		 *              不传默认常规验证码（滑块拼图、图中点选、短信上行）。
@@ -296,7 +303,9 @@ platform :ios, '8.0'
 		
 - 
 
-	        /**
+	   
+       
+        /**
 		 * @abstract    设置极端情况下，当验证码服务不可用时，是否开启降级方案。
 		 *              默认开启，当触发降级开关时，将直接通过验证，进入下一步。
 		 */
@@ -304,11 +313,12 @@ platform :ios, '8.0'
 		
 - 	
 
-		/**
-		 * @abstract    设置发生第fallBackCount次错误时，将触发降级。取值范围 >=1
-		 *              默认设置为3次，第三次服务器发生错误时，触发降级，直接通过验证。
-		 */
-		@property(nonatomic) NSUInteger fallBackCount;	
+
+			/**
+			 * @abstract    设置发生第fallBackCount次错误时，将触发降级。取值范围 >=1
+			 *              默认设置为3次，第三次服务器发生错误时，触发降级，直接通过验证。
+		 	 */
+			@property(nonatomic) NSUInteger fallBackCount;	
 		
 -
 
@@ -316,15 +326,47 @@ platform :ios, '8.0'
 		* @abstract    是否隐藏关闭按钮
 		*              默认不隐藏，设置为YES隐藏，NO不隐藏
 		*/
-		@property(nonatomic) BOOL closeButtonHidden;	
+		@property(nonatomic) BOOL closeButtonHidden;
+        
+
+
+- 
+        
+        
+      
+        /**
+ 		* @abstract   验证码ipv6配置。
+ 		*             默认为 no，传 yes 表示支持ipv6网络。
+ 		*/
+		@property(nonatomic) BOOL ipv6;
+
+    	/**
+    	 * @abstract   反作弊相关环境配置，业务方可根据需要配置wmConfigServer，不传默认使用易盾			服务配置
+    	 *
+     	*/
+    	@property(nonatomic) NSString *wmConfigServer;
+
+    	/**
+    	 * @abstract   反作弊相关环境配置，业务方可根据需要配置wmApiServer，不传默认使用易盾服务配置
+    	 *
+    	 */
+    	@property(nonatomic) NSString *wmApiServer;
+
+   		 /**
+     	  *  @abstract   反作弊相关环境配置，业务方可根据需要配置wmStaticServer，不传默认使用易盾服务配置
+    	  *
+    	  */
+    @property(nonatomic) NSString *wmStaticServer;
 
 
  - 
  
-       /**
-       * @abstract    点击背景是否可以关闭验证码视图
-       *              默认可以关闭，设置为YES可以关闭，NO不可以关闭
-       */
+    	
+        
+        /**
+    	 * @abstract    点击背景是否可以关闭验证码视图
+ 	 	*              默认可以关闭，设置为YES可以关闭，NO不可以关闭
+     	*/
        @property(nonatomic) BOOL shouldCloseByTouchBackground;	
 
 
