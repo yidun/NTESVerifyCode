@@ -220,6 +220,30 @@ typedef NS_ENUM(NSInteger, NTESVerifyCodeClose) {
 @property(nonatomic) NSUInteger fallBackCount;
 
 /**
+ * @abstract   验证码ipv6配置。
+ *             默认为 no，传 yes 表示支持ipv6网络。
+ */
+@property(nonatomic) BOOL ipv6;
+
+/**
+ * @abstract   反作弊相关环境配置，业务方可根据需要配置wmConfigServer，不传默认使用易盾服务配置
+ *
+ */
+@property(nonatomic) NSString *wmConfigServer;
+
+/**
+ * @abstract   反作弊相关环境配置，业务方可根据需要配置wmApiServer，不传默认使用易盾服务配置
+ *
+ */
+@property(nonatomic) NSString *wmApiServer;
+
+/**
+ *  @abstract   反作弊相关环境配置，业务方可根据需要配置wmStaticServer，不传默认使用易盾服务配置
+ *
+*/
+@property(nonatomic) NSString *wmStaticServer;
+
+/**
 * @abstract    是否隐藏关闭按钮
 *              默认不隐藏，设置为YES隐藏，NO不隐藏
 */
@@ -287,7 +311,7 @@ typedef NS_ENUM(NSInteger, NTESVerifyCodeClose) {
 
  *
  */
-- (void)openVerifyCodeView:(UIView *)topView;
+- (void)openVerifyCodeView:(UIView *  _Nullable)topView;
 
 ///**
 // *  @abstract   关闭验证码视图
