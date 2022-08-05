@@ -15,8 +15,10 @@
  */
 typedef NS_ENUM(NSInteger, NTESVerifyCodeLang) {
     NTESVerifyCodeLangCN = 1, // 中文
-    NTESVerifyCodeLangEN,     // 英文
-    NTESVerifyCodeLangTW,     // 繁体
+    NTESVerifyCodeLangENUS,   // 美式英文
+    NTESVerifyCodeLangENGB,   // 英式英文
+    NTESVerifyCodeLangTW,     // 台湾繁体
+    NTESVerifyCodeLangHK,     // 香港繁体
     NTESVerifyCodeLangJP,     // 日文
     NTESVerifyCodeLangKR,     // 韩文
     NTESVerifyCodeLangTL,     // 泰文
