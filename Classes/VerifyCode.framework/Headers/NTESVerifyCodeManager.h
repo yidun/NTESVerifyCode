@@ -227,6 +227,14 @@ typedef NS_ENUM(NSInteger, NTESDeviceOrientation) {
 @property(nonatomic) NTESVerifyCodeFontSize fontSize;
 
 /**
+ * @abstract    是否开启哀悼主题
+ *
+ * @说明         默认值:不开启
+ */
+
+@property(nonatomic)BOOL mournTheme;
+
+/**
  * @abstract    验证码滑块icon url，不传则使用易盾默认滑块显示。
  */
 @property(nonatomic) NSString *slideIconURL;
