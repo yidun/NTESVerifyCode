@@ -145,6 +145,14 @@ typedef NS_ENUM(NSInteger, NTESDeviceOrientation) {
     NTESDeviceOrientationLandscape            // Device oriented horizontally
 };
 
+//
+typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
+    // 明亮主题
+    NTESUserInterfaceStyleLight = 1,
+    // 暗黑主题
+    NTESUserInterfaceStyleDark
+};
+
 @protocol NTESVerifyCodeManagerDelegate
 @optional
 
@@ -233,6 +241,12 @@ typedef NS_ENUM(NSInteger, NTESDeviceOrientation) {
  */
 
 @property(nonatomic)BOOL mournTheme;
+
+/**
+ * @abstract    明亮暗黑主题
+ */
+
+@property(nonatomic)NTESUserInterfaceStyle userInterfaceStyle;
 
 /**
  * @abstract    验证码滑块icon url，不传则使用易盾默认滑块显示。
