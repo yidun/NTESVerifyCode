@@ -342,6 +342,12 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
 @property(nonatomic) BOOL shouldCloseByTouchBackground;
 
 /**
+* @abstract  是否显示验证码内的关闭按钮
+*              默认不显示，设置为YES显示，NO隐藏
+*/
+@property(nonatomic) BOOL innerCloseButtonShow;
+
+/**
  extraData透传业务数据
  */
 @property (nonatomic) NSString *extraData;

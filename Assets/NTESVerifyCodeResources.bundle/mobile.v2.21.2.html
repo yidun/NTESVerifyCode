@@ -168,7 +168,11 @@
 	      !obj[curKey] && (obj[curKey] = {});
 	      combineArg(obj[curKey], key.slice(index + 1), value);
 	    } else {
-	      obj[key] = value;
+	      var tmpValue = value;
+	      if (window.decodeURIComponent) {
+	        tmpValue = window.decodeURIComponent(tmpValue);
+	      }
+	      obj[key] = tmpValue;
 	    }
 	  }
 	  return args;
@@ -213,11 +217,14 @@
 	      os = _navtiveOptions$os === undefined ? '' : _navtiveOptions$os,
 	      _navtiveOptions$mobil = navtiveOptions.mobileTimeout,
 	      mobileTimeout = _navtiveOptions$mobil === undefined ? 10000 : _navtiveOptions$mobil,
-	      restOptions = _objectWithoutProperties(navtiveOptions, ['feedbackEnable', 'defaultFallback', 'errorFallbackCount', 'os', 'mobileTimeout']);
+	      _navtiveOptions$enabl = navtiveOptions.enableClose,
+	      enableClose = _navtiveOptions$enabl === undefined ? true : _navtiveOptions$enabl,
+	      restOptions = _objectWithoutProperties(navtiveOptions, ['feedbackEnable', 'defaultFallback', 'errorFallbackCount', 'os', 'mobileTimeout', 'enableClose']);
 
 	  return Object.assign(defaultOptions, _extends({}, restOptions, {
 	    runEnv: RUN_ENV[os.toUpperCase()],
 	    defaultFallback: defaultFallback !== 'false',
+	    enableClose: enableClose !== 'false',
 	    errorFallbackCount: parseInt(errorFallbackCount),
 	    feedbackEnable: feedbackEnable === 'true',
 	    os: os,
@@ -237,6 +244,7 @@
 	  runEnv: '',
 	  defaultFallback: true,
 	  staticServer: isDev ? 'localhost:9000' : undefined,
+	  smsNew: true,
 	  onVerify: function onVerify(err, ret) {
 	    if (isInitTimeout) return;
 	    var result = !err; // 新的接口定义, err不为null时,表示出错,为null表示成功
@@ -253,6 +261,11 @@
 	    log('onReady');
 	    postMessageBridge('onReady', [document.body.offsetWidth, document.body.offsetHeight]);
 	  },
+	  onBeforeClose: function onBeforeClose() {
+	    log('onBeforeClose');
+	    postMessageBridge('onBeforeClose');
+	  },
+
 	  onFloatHeightChange: function onFloatHeightChange(args) {
 	    if (options.mode !== FLOAT_MODE) return;
 	    log('onFloatHeightChange emited');
@@ -371,7 +384,10 @@
 	  SMS: 4,
 	  INTELLISENSE: 5,
 	  ICON_POINT: 7,
-	  INFERENCE: 9
+	  INFERENCE: 9,
+	  WORD_ORDER: 10,
+	  SPACE: 11,
+	  VOICE: 12
 	};
 
 	exports.CAPTCHA_CLASS = {
@@ -400,6 +416,16 @@
 
 	exports.WIDTH_LIMIT = [220, 10000];
 
+	exports.LARGE_SIZE_TYPE = {
+	  medium: 18,
+	  large: 20,
+	  'x-large': 24
+	};
+	exports.SIZE_TYPE = {
+	  DEFAULT: 10,
+	  LARGE: 20
+	};
+
 	exports.SAMPLE_NUM = 50;
 
 	exports.DEVICE = {
@@ -410,7 +436,7 @@
 
 	exports.MAX_VERIFICATION = 5;
 
-	exports.RTL_LANGS = ['ar', 'he'];
+	exports.RTL_LANGS = ['ar', 'he', 'ug', 'fa', 'ur'];
 
 	exports.CACHE_MIN = 1000 * 60; // 缓存时长单位，1分钟
 
@@ -431,6 +457,12 @@
 	  MINIPROGRAM: 40,
 	  JUMPER_MINI_PROGRAM: 50,
 	  QUICKAPP: 60
+	};
+
+	exports.CLOSE_SOURCE = {
+	  USER: 1, // 用户关闭
+	  PROCESS: 2, // 流程关闭
+	  CLOSE: 3 // close方法调用关闭
 	};
 
 /***/ }),
@@ -594,7 +626,7 @@
 	  }
 
 	  function getTimestamp(msec) {
-	    msec = !msec && msec !== 0 ? msec : 1;
+	    msec = msec && msec !== 0 ? msec : 1;
 	    return parseInt(new Date().valueOf() / msec, 10);
 	  }
 
@@ -615,7 +647,12 @@
 	  }
 
 	  function loadResource(config, cb) {
-	    if (window.initNECaptcha) return cb(null);
+	    if (window.initNECaptcha) {
+	      setTimeout(function () {
+	        cb(null);
+	      }, 0);
+	      return;
+	    }
 	    var isDev = typeof process === 'undefined' || ("production") === 'development'; // 仅在demo中使用，示例代码中删除该变量
 	    function genUrl(server) {
 	      var path = 'load' + (isDev ? '' : '.min') + '.js';
@@ -650,6 +687,13 @@
 	    step(0);
 	  }
 
+	  /*
+	   * entry: initNECaptchaWithFallback
+	   * options:
+	   *  errorFallbackCount: 触发降级的错误次数，默认第三次错误降级
+	   *  defaultFallback: 是否开启默认降级
+	   *  onFallback: 自定义降级方案，参数为默认validate
+	  */
 	  function initNECaptchaWithFallback(options, onload, onerror) {
 	    var captchaIns = null;
 
@@ -678,7 +722,7 @@
 	      }
 	      setFallbackTip(captchaIns);
 
-	      config.onVerify && config.onVerify(null, { validate: validate });
+	      config.onVerify && config.onVerify(null, { validate: validate, isFallback: true });
 	    };
 	    var noFallback = !defaultFallback && !config.onFallback;
 
@@ -812,66 +856,66 @@
 	// Production steps of ECMA-262, Edition 5, 15.4.4.14
 	// Reference: http://es5.github.io/#x15.4.4.14
 	if (!Array.prototype.indexOf) {
-	  Array.prototype.indexOf = function (searchElement, fromIndex) {
-	    var k;
+	    Array.prototype.indexOf = function (searchElement, fromIndex) {
+	        var k;
 
-	    // 1. Let O be the result of calling ToObject passing
-	    //    the this value as the argument.
-	    if (this == null) {
-	      throw new TypeError('"this" is null or not defined');
-	    }
+	        // 1. Let O be the result of calling ToObject passing
+	        //    the this value as the argument.
+	        if (this == null) {
+	            throw new TypeError('"this" is null or not defined');
+	        }
 
-	    var O = Object(this);
+	        var O = Object(this);
 
-	    // 2. Let lenValue be the result of calling the Get
-	    //    internal method of O with the argument "length".
-	    // 3. Let len be ToUint32(lenValue).
-	    var len = O.length >>> 0;
+	        // 2. Let lenValue be the result of calling the Get
+	        //    internal method of O with the argument "length".
+	        // 3. Let len be ToUint32(lenValue).
+	        var len = O.length >>> 0;
 
-	    // 4. If len is 0, return -1.
-	    if (len === 0) {
-	      return -1;
-	    }
+	        // 4. If len is 0, return -1.
+	        if (len === 0) {
+	            return -1;
+	        }
 
-	    // 5. If argument fromIndex was passed let n be
-	    //    ToInteger(fromIndex); else let n be 0.
-	    var n = +fromIndex || 0;
+	        // 5. If argument fromIndex was passed let n be
+	        //    ToInteger(fromIndex); else let n be 0.
+	        var n = +fromIndex || 0;
 
-	    if (Math.abs(n) === Infinity) {
-	      n = 0;
-	    }
+	        if (Math.abs(n) === Infinity) {
+	            n = 0;
+	        }
 
-	    // 6. If n >= len, return -1.
-	    if (n >= len) {
-	      return -1;
-	    }
+	        // 6. If n >= len, return -1.
+	        if (n >= len) {
+	            return -1;
+	        }
 
-	    // 7. If n >= 0, then Let k be n.
-	    // 8. Else, n<0, Let k be len - abs(n).
-	    //    If k is less than 0, then let k be 0.
-	    k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+	        // 7. If n >= 0, then Let k be n.
+	        // 8. Else, n<0, Let k be len - abs(n).
+	        //    If k is less than 0, then let k be 0.
+	        k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
 
-	    // 9. Repeat, while k < len
-	    while (k < len) {
-	      // a. Let Pk be ToString(k).
-	      //   This is implicit for LHS operands of the in operator
-	      // b. Let kPresent be the result of calling the
-	      //    HasProperty internal method of O with argument Pk.
-	      //   This step can be combined with c
-	      // c. If kPresent is true, then
-	      //    i.  Let elementK be the result of calling the Get
-	      //        internal method of O with the argument ToString(k).
-	      //   ii.  Let same be the result of applying the
-	      //        Strict Equality Comparison Algorithm to
-	      //        searchElement and elementK.
-	      //  iii.  If same is true, return k.
-	      if (k in O && O[k] === searchElement) {
-	        return k;
-	      }
-	      k++;
-	    }
-	    return -1;
-	  };
+	        // 9. Repeat, while k < len
+	        while (k < len) {
+	            // a. Let Pk be ToString(k).
+	            //   This is implicit for LHS operands of the in operator
+	            // b. Let kPresent be the result of calling the
+	            //    HasProperty internal method of O with argument Pk.
+	            //   This step can be combined with c
+	            // c. If kPresent is true, then
+	            //    i.  Let elementK be the result of calling the Get
+	            //        internal method of O with the argument ToString(k).
+	            //   ii.  Let same be the result of applying the
+	            //        Strict Equality Comparison Algorithm to
+	            //        searchElement and elementK.
+	            //  iii.  If same is true, return k.
+	            if (k in O && O[k] === searchElement) {
+	                return k;
+	            }
+	            k++;
+	        }
+	        return -1;
+	    };
 	}
 
 /***/ }),
@@ -881,57 +925,57 @@
 	// 实现 ECMA-262, Edition 5, 15.4.4.19
 	// 参考: http://es5.github.com/#x15.4.4.19
 	if (!Array.prototype.map) {
-	  Array.prototype.map = function (callback, thisArg) {
-	    var T, A, k;
+	    Array.prototype.map = function (callback, thisArg) {
+	        var T, A, k;
 
-	    if (this == null) {
-	      throw new TypeError(' this is null or not defined');
-	    }
+	        if (this == null) {
+	            throw new TypeError(' this is null or not defined');
+	        }
 
-	    // 1. 将O赋值为调用map方法的数组.
-	    var O = Object(this);
+	        // 1. 将O赋值为调用map方法的数组.
+	        var O = Object(this);
 
-	    // 2.将len赋值为数组O的长度.
-	    var len = O.length >>> 0;
+	        // 2.将len赋值为数组O的长度.
+	        var len = O.length >>> 0;
 
-	    // 3.如果callback不是函数,则抛出TypeError异常.
-	    if (Object.prototype.toString.call(callback) !== '[object Function]') {
-	      throw new TypeError(callback + ' is not a function');
-	    }
+	        // 3.如果callback不是函数,则抛出TypeError异常.
+	        if (Object.prototype.toString.call(callback) !== '[object Function]') {
+	            throw new TypeError(callback + ' is not a function');
+	        }
 
-	    // 4. 如果参数thisArg有值,则将T赋值为thisArg;否则T为undefined.
-	    if (thisArg) {
-	      T = thisArg;
-	    }
+	        // 4. 如果参数thisArg有值,则将T赋值为thisArg;否则T为undefined.
+	        if (thisArg) {
+	            T = thisArg;
+	        }
 
-	    // 5. 创建新数组A,长度为原数组O长度len
-	    A = new Array(len);
+	        // 5. 创建新数组A,长度为原数组O长度len
+	        A = new Array(len);
 
-	    // 6. 将k赋值为0
-	    k = 0;
+	        // 6. 将k赋值为0
+	        k = 0;
 
-	    // 7. 当 k < len 时,执行循环.
-	    while (k < len) {
-	      var kValue, mappedValue;
+	        // 7. 当 k < len 时,执行循环.
+	        while (k < len) {
+	            var kValue, mappedValue;
 
-	      // 遍历O,k为原数组索引
-	      if (k in O) {
-	        // kValue为索引k对应的值.
-	        kValue = O[k];
+	            // 遍历O,k为原数组索引
+	            if (k in O) {
+	                // kValue为索引k对应的值.
+	                kValue = O[k];
 
-	        // 执行callback,this指向T,参数有三个.分别是kValue:值,k:索引,O:原数组.
-	        mappedValue = callback.call(T, kValue, k, O);
+	                // 执行callback,this指向T,参数有三个.分别是kValue:值,k:索引,O:原数组.
+	                mappedValue = callback.call(T, kValue, k, O);
 
-	        // 返回值添加到新数组A中.
-	        A[k] = mappedValue;
-	      }
-	      // k自增1
-	      k++;
-	    }
+	                // 返回值添加到新数组A中.
+	                A[k] = mappedValue;
+	            }
+	            // k自增1
+	            k++;
+	        }
 
-	    // 8. 返回新数组A
-	    return A;
-	  };
+	        // 8. 返回新数组A
+	        return A;
+	    };
 	}
 
 /***/ }),
