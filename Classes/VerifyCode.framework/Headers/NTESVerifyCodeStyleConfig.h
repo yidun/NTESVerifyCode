@@ -21,6 +21,9 @@ typedef NS_ENUM(NSUInteger, NTESCapBarTextAlign) {
 // 验证码圆角
 @property (nonatomic, assign) NSUInteger radius;
 
+// 验证码弹框边框颜色，想要去掉的话可取 transparent 或者与背景色同色
+@property (nonatomic, copy) NSString *verifyBorderColor;
+
 #pragma mark 验证码标题样式
 
 // 弹框头部标题文字对齐方式，可选值为 left center right
@@ -114,6 +117,9 @@ typedef NS_ENUM(NSUInteger, NTESCapBarTextAlign) {
 
 // 滑块与验证码视图之间的距离,单位px
 @property (nonatomic, copy) NSString *gap;
+
+// 滑块文案描述。默认：向右拖动滑块填充拼图。
+@property (nonatomic, copy) NSString *slideTip;
 
 #pragma mark 验证码右上方刷新按钮和语音按钮组成组件
 

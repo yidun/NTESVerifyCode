@@ -355,6 +355,11 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
 // 设置验证码方向,验证码不会跟随设备旋转而旋转。
 @property(nonatomic, assign)NTESDeviceOrientation deviceOrientation;
 
+/** 滑动拼图、智能无感知、短信、语音验证失败后，停留时间。
+ 如果需要延长错误提示时间（为了让用户感知到）可自定义配置，单位为 ms
+ */
+@property (nonatomic, assign) NSUInteger refreshInterval;
+
 /**
  *  @abstract   初始化方法
  *
@@ -366,7 +371,7 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
  *  @abstract   配置参数
  *
  *  @param      captcha_id      验证码id
- *  @param      timeoutInterval 加载验证码的超时时间,最长12s。这个时间尽量设置长一些，比如7秒以上(7-12s)
+ *  @param      timeoutInterval 加载验证码的超时时间,这个时间尽量设置长一些，比如7秒以上
  *
  */
 - (void)configureVerifyCode:(NSString *)captcha_id
@@ -376,7 +381,7 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
  *  @abstract   配置参数
  *
  *  @param      captcha_id      验证码id
- *  @param      timeoutInterval 加载验证码的超时时间,最长12s。这个时间尽量设置长一些，比如7秒以上(7-12s)
+ *  @param      timeoutInterval 加载验证码的超时时间,这个时间尽量设置长一些，比如7秒以上
  *  @param      styleConfig 验证码验证码样式配置
  *
  */
