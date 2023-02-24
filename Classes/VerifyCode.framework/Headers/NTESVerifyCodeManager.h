@@ -361,6 +361,11 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
 @property (nonatomic, assign) NSUInteger refreshInterval;
 
 /**
+ * @abstract    验证码私有化环境配置，是否允许采集系统信息,默认为YES采集，设置NO不采集。
+ */
+@property (nonatomic, assign) BOOL allowUploadSystemInfo;
+
+/**
  *  @abstract   初始化方法
  *
  *  @return     返回NTESVerifyCodeManager实例对象
@@ -371,7 +376,7 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
  *  @abstract   配置参数
  *
  *  @param      captcha_id      验证码id
- *  @param      timeoutInterval 加载验证码的超时时间,这个时间尽量设置长一些，比如7秒以上
+ *  @param      timeoutInterval 加载验证码的超时时间,最长12s。这个时间尽量设置长一些，比如7秒以上(7-12s)
  *
  */
 - (void)configureVerifyCode:(NSString *)captcha_id
@@ -381,7 +386,7 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
  *  @abstract   配置参数
  *
  *  @param      captcha_id      验证码id
- *  @param      timeoutInterval 加载验证码的超时时间,这个时间尽量设置长一些，比如7秒以上
+ *  @param      timeoutInterval 加载验证码的超时时间,最长12s。这个时间尽量设置长一些，比如7秒以上(7-12s)
  *  @param      styleConfig 验证码验证码样式配置
  *
  */
