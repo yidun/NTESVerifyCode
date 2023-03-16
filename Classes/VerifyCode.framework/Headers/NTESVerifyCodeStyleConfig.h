@@ -121,6 +121,16 @@ typedef NS_ENUM(NSUInteger, NTESCapBarTextAlign) {
 // 滑块文案描述。默认：向右拖动滑块填充拼图。
 @property (nonatomic, copy) NSString *slideTip;
 
+// 左边距，如果相对于整个 bar 居中提示文字，设为 0；
+@property (nonatomic, copy) NSString *paddingLeft;
+
+// 加载中时的背景图片地址，需要填入一个 url
+@property (nonatomic, copy) NSString *loadBackgroundImage;
+
+// 加载中时的背景颜色，支持 CSS 所有颜色值
+@property (nonatomic, copy) NSString *loadBackgroundColor;
+
+
 #pragma mark 验证码右上方刷新按钮和语音按钮组成组件
 
 // 组件圆角大小
