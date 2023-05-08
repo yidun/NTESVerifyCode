@@ -16,7 +16,7 @@ Pod::Spec.new do |spec|
   #
 
   spec.name         = "NTESVerifyCode"
-  spec.version      = "3.5.2"
+  spec.version      = "3.5.3.beta"
   spec.summary      = "NTESVerifyCode."
 
   # This description is used to generate tags and improve search results.
@@ -118,7 +118,7 @@ Pod::Spec.new do |spec|
   # spec.framework  = "SomeFramework"
   spec.frameworks = "CoreFoundation", "CoreGraphics", "JavaScriptCore", "QuartzCore", "Security", "WebKit", "SystemConfiguration", "Foundation"
   
-  spec.vendored_frameworks = ["Classes/VerifyCode.framework"]
+  spec.vendored_frameworks = ["Classes/VerifyCode.xcframework"]
   
   spec.resource = "Assets/NTESVerifyCodeResources.bundle"
 
