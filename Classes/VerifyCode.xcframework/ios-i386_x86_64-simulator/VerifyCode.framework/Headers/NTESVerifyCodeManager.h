@@ -109,16 +109,6 @@ typedef NS_ENUM(NSInteger, NTESVerifyCodeFontSize) {
 };
 
 /**
- * @abstract    设置验证码类型
- */
-typedef NS_ENUM(NSInteger, NTESVerifyCodeMode) {
-    // 传统验证码
-    NTESVerifyCodeNormal = 1,
-    // 无感知验证码
-    NTESVerifyCodeBind,
-};
-
-/**
  * @abstract    设置私有化协议类型
  */
 typedef NS_ENUM(NSInteger, NTESVerifyCodeProtocol) {
@@ -267,15 +257,6 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
  * @abstract    验证码验证失败的滑块icon url，不传则使用易盾默认滑块显示。
  */
 @property(nonatomic) NSString *slideIconErrorURL;
-
-/**
- * @abstract    设置验证码类型
- *
- * @说明         验证码枚举类型NTESVerifyCodeMode，可选类型见枚举定义
- *              不传默认传统验证码。
- *
- */
-@property(nonatomic) NTESVerifyCodeMode mode;
 
 /**
  * @abstract    验证码私有化环境配置，业务方可根据需要配置staticServer，不传默认使用易盾服务配置。
