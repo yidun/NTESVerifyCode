@@ -109,10 +109,6 @@
 	window.clickOutSide = clickOutSide;
 	window.log = log;
 
-	window.closeCaptcha = closeCaptcha;
-	window.captchaVerify = captchaVerify;
-	window.popupCaptcha = popupCaptcha;
-
 	function log(str) {
 	  if (!debugMode) return;
 	  var p = document.createElement('p');
@@ -127,18 +123,6 @@
 	      controlBarHeight = _previousData.controlBarHeight;
 
 	  onFloatHeightChange({ total: controlBarHeight, controlBarHeight: controlBarHeight, gapHeight: 0, imagePanelHeight: 0 });
-	}
-
-	function closeCaptcha() {
-	  captchaIns && captchaIns.close();
-	}
-
-	function captchaVerify() {
-	  captchaIns && captchaIns.verify();
-	}
-
-	function popupCaptcha() {
-	  captchaIns && captchaIns.popUp();
 	}
 
 	function getArgs() {
@@ -219,16 +203,16 @@
 	      os = _navtiveOptions$os === undefined ? '' : _navtiveOptions$os,
 	      _navtiveOptions$mobil = navtiveOptions.mobileTimeout,
 	      mobileTimeout = _navtiveOptions$mobil === undefined ? 10000 : _navtiveOptions$mobil,
-	      _navtiveOptions$enabl = navtiveOptions.enableClose,
-	      enableClose = _navtiveOptions$enabl === undefined ? true : _navtiveOptions$enabl,
+	      _navtiveOptions$close = navtiveOptions.closeEnable,
+	      closeEnable = _navtiveOptions$close === undefined ? true : _navtiveOptions$close,
 	      _navtiveOptions$refre = navtiveOptions.refreshInterval,
 	      refreshInterval = _navtiveOptions$refre === undefined ? 300 : _navtiveOptions$refre,
-	      restOptions = _objectWithoutProperties(navtiveOptions, ['feedbackEnable', 'disableFocusVisible', 'defaultFallback', 'errorFallbackCount', 'os', 'mobileTimeout', 'enableClose', 'refreshInterval']);
+	      restOptions = _objectWithoutProperties(navtiveOptions, ['feedbackEnable', 'disableFocusVisible', 'defaultFallback', 'errorFallbackCount', 'os', 'mobileTimeout', 'closeEnable', 'refreshInterval']);
 
 	  return Object.assign(defaultOptions, _extends({}, restOptions, {
 	    runEnv: RUN_ENV[os.toUpperCase()],
 	    defaultFallback: defaultFallback !== 'false',
-	    enableClose: enableClose !== 'false',
+	    closeEnable: closeEnable !== 'false',
 	    errorFallbackCount: parseInt(errorFallbackCount),
 	    feedbackEnable: feedbackEnable === 'true',
 	    disableFocusVisible: disableFocusVisible === 'true',
@@ -243,9 +227,10 @@
 	var previousData = {};
 	var defaultOptions = {
 	  element: captchaEl,
-	  mode: 'popup',
-	  enableClose: true,
+	  mode: POPUP_MODE,
+	  closeEnable: true,
 	  width: 330,
+	  apiVersion: 2,
 	  protocol: isProd ? 'https' : 'http',
 	  feedbackEnable: false,
 	  runEnv: '',
@@ -264,10 +249,15 @@
 	    var next = '' + !!(err && err.data.type === CAPTCHA_TYPE.INTELLISENSE);
 	    postMessageBridge('onValidate', [value, validate, msg, next]);
 	  },
-	  onReady: function onReady() {
+	  onReady: function onReady(instance) {
 	    if (isInitTimeout) return;
 	    log('onReady');
-	    postMessageBridge('onReady', [document.body.offsetWidth, document.body.offsetHeight]);
+	    var isIntellisense = instance.isIntellisense();
+	    if (isIntellisense) {
+	      instance && instance.verify();
+	    }
+	    // 第三个参数表示是否显示验证码弹框
+	    postMessageBridge('onReady', [document.body.offsetWidth, document.body.offsetHeight, !isIntellisense]);
 	  },
 	  onBeforeClose: function onBeforeClose() {
 	    log('onBeforeClose');
@@ -304,7 +294,7 @@
 
 	if (isDev) {
 	  Object.assign(options, {
-	    captchaType: 'jigsaw',
+	    // captchaType: 'jigsaw',
 	    __serverConfig__: {
 	      staticServers: [''],
 	      resources: ['/core.js', '/light.js'],
@@ -371,7 +361,9 @@
 	  isInitTimeout = false;
 	  captchaIns = instance;
 	  log('onLoad');
-	  postMessageBridge('onLoad');
+	  if (!captchaIns.isIntellisense() && options.mode === POPUP_MODE) {
+	    captchaIns && captchaIns.verify();
+	  }
 	}, function (e) {
 	  log(JSON.stringify(e));
 	  if (e.code === TIMEOUT_ERROR) {
@@ -676,7 +668,8 @@
 
 	      return urls;
 	    }
-	    var urls = genUrl(config.staticServer || ['cstaticdun.126.net', 'cstatic.dun.163yun.com']);
+	    var defaultStaticServer = config.ipv6 ? ['cstaticdun-v6.126.net', 'cstaticdun.126.net'] : ['cstaticdun.126.net', 'cstaticdun1.126.net'];
+	    var urls = genUrl(config.staticServer || defaultStaticServer);
 
 	    function step(i) {
 	      var url = urls[i] + '?v=' + getTimestamp(CACHE_MIN);
