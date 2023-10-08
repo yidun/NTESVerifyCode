@@ -253,7 +253,7 @@
 	  runEnv: '',
 	  defaultFallback: true,
 	  staticServer: isDev ? 'localhost:9000' : undefined,
-	  smsNew: true,
+	  smsNewVersion: 2, // 版本 2 以后的移动端短信上行点击发送直接跳转到短信界面
 	  disableFocusVisible: false,
 	  onVerify: function onVerify(err, ret) {
 	    if (isInitTimeout) return;
@@ -483,6 +483,8 @@
 	  PROCESS: 2, // 流程关闭
 	  CLOSE: 3 // close方法调用关闭
 	};
+
+	exports.IV_VERSION = 2;
 
 /***/ }),
 /* 2 */
