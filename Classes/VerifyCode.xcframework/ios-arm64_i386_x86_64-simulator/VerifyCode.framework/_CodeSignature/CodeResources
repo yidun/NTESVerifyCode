@@ -12,6 +12,10 @@
 		<data>
 		qG4mQaBz49QTQaFzADb3Ttk/7hM=
 		</data>
+		<key>Headers/VerifyCode.h</key>
+		<data>
+		cwBeVzy/Q/Smk560pgP9DUVvB2o=
+		</data>
 		<key>Info.plist</key>
 		<data>
 		zMPOI5O46osKyFaF4zw0K1r/Mhs=
@@ -47,6 +51,17 @@
 			<key>hash2</key>
 			<data>
 			s80i1XA+V/0V3rUJMhxypPLIuJXw9rVyDsqSL6T4EyM=
+			</data>
+		</dict>
+		<key>Headers/VerifyCode.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			cwBeVzy/Q/Smk560pgP9DUVvB2o=
+			</data>
+			<key>hash2</key>
+			<data>
+			OKXcF6q18n3tKemU0fUrNxt7zojv+tsuu2dawFuCo88=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
