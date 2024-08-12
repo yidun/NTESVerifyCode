@@ -164,9 +164,10 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
  * @param result 验证结果 BOOL:YES/NO
  * @param validate 二次校验数据，如果验证结果为false，validate返回空
  * @param message 结果描述信息
+ * @param captchaType 验证码类型
  *
  */
-- (void)verifyCodeValidateFinish:(BOOL)result validate:(NSString *_Nullable)validate message:(NSString *)message;
+- (void)verifyCodeValidateFinish:(BOOL)result validate:(NSString *_Nullable)validate message:(NSString *_Nullable)message captchaType:(NSString *_Nullable)captchaType;
 
 /**
  * 关闭验证码窗口后的回调

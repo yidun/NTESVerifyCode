@@ -6,7 +6,7 @@
 	<dict>
 		<key>Headers/NTESVerifyCodeManager.h</key>
 		<data>
-		AqqPo8C2Ax1EIf0eS22X3MdalpM=
+		l4RIZj1/UDxN+ph/Zns+yBL5b3w=
 		</data>
 		<key>Headers/NTESVerifyCodeStyleConfig.h</key>
 		<data>
@@ -24,6 +24,10 @@
 		<data>
 		UnG8ccsrMC18iCqjc2k5RIy4fhk=
 		</data>
+		<key>PrivacyInfo.xcprivacy</key>
+		<data>
+		aPL98zXuTI1njkjzCrXTK02wT9s=
+		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
@@ -31,11 +35,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			AqqPo8C2Ax1EIf0eS22X3MdalpM=
+			l4RIZj1/UDxN+ph/Zns+yBL5b3w=
 			</data>
 			<key>hash2</key>
 			<data>
-			RCMwwuY3pTTfhPm5DhyJYblqQhuG5/5apU8bnJR5asM=
+			cAGIYTiCY79Y9qYrVaQHi7NoS8tqhgFSvIVgfvEqcAU=
 			</data>
 		</dict>
 		<key>Headers/NTESVerifyCodeStyleConfig.h</key>
@@ -69,6 +73,17 @@
 			<key>hash2</key>
 			<data>
 			XZqbyZ/vAhdkIz3crYYJ4BT/tWRyz+BGx1Vl55/i6KI=
+			</data>
+		</dict>
+		<key>PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			aPL98zXuTI1njkjzCrXTK02wT9s=
+			</data>
+			<key>hash2</key>
+			<data>
+			fDQtGkll4uVwTnNKu8A8YywfzmSSGRU+cPRUdHaXK2c=
 			</data>
 		</dict>
 	</dict>
