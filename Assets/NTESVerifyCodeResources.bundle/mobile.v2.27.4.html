@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="renderer" content="webkit">
-  <meta name="viewport" id="viewport" content="initial-scale=1,maximum-scale=1">
+  <meta name="viewport" id="viewport" content="initial-scale=1, maximum-scale=1"/>
   <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
   <title>易盾验证码</title>
   <style>
@@ -269,10 +269,14 @@
 	    var msg = result ? '验证成功' : '验证失败';
 	    var value = '' + result; // 避免iOS/android对bool类型转换不同，这里统一转换成字符串处理
 	    var next = '' + !!(err && err.data.type === CAPTCHA_TYPE.INTELLISENSE);
-	    var errorCode = !result ? err && err.data.errorCode : '';
-	    var errorMsg = !result ? err && err.data.errorMsg : '';
+	    var getErrorData = function getErrorData(field) {
+	      return result ? '' : err && err.data[field] != null ? err.data[field] : '';
+	    };
+	    var errorCode = getErrorData('errorCode');
+	    var errorMsg = getErrorData('errorMsg');
+	    var errorValidate = getErrorData('validate');
 	    var captchaType = captchaIns ? '' + captchaIns.getCaptchaType() : 'unknown';
-	    postMessageBridge('onValidate', [value, validate, msg, next, errorCode, errorMsg, captchaType]);
+	    postMessageBridge('onValidate', [value, validate, msg, next, errorCode, errorMsg, captchaType, errorValidate]);
 	  },
 	  onReady: function onReady(instance) {
 	    if (preload) return;

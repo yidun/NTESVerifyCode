@@ -164,10 +164,20 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
  * @param result 验证结果 BOOL:YES/NO
  * @param validate 二次校验数据，如果验证结果为false，validate返回空
  * @param message 结果描述信息
- * @param captchaType 验证码类型
  *
  */
-- (void)verifyCodeValidateFinish:(BOOL)result validate:(NSString *_Nullable)validate message:(NSString *_Nullable)message captchaType:(NSString *_Nullable)captchaType;
+- (void)verifyCodeValidateFinish:(BOOL)result validate:(NSString *_Nullable)validate message:(NSString *_Nullable)message;
+
+/**
+ * 完成验证之后的回调
+ *
+ * @param result 验证结果 BOOL:YES/NO
+ * @param validate 二次校验数据，如果验证结果为false，validate返回空
+ * @param message 结果描述信息
+ * @param extraData 额外更多信息
+ *
+ */
+- (void)verifyCodeValidateFinish:(BOOL)result validate:(NSString *_Nullable)validate message:(NSString *_Nullable)message extraData:(NSDictionary *_Nullable)extraData;
 
 /**
  * 关闭验证码窗口后的回调
@@ -333,6 +343,11 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
  extraData透传业务数据
  */
 @property (nonatomic) NSString *extraData;
+
+/**
+ user 透传业务数据
+ */
+@property (nonatomic) NSString *user;
 
 // 设置验证码方向,验证码不会跟随设备旋转而旋转。
 @property(nonatomic, assign)NTESDeviceOrientation deviceOrientation;
