@@ -325,10 +325,20 @@ NSData *imageData = [NSData dataWithContentsOfFile:bundlePath];
  * @param result 验证结果 BOOL:YES/NO
  * @param validate 二次校验数据，如果验证结果为false，validate返回空
  * @param message 结果描述信息
- * @param captchaType 验证码类型
  *
  */
-- (void)verifyCodeValidateFinish:(BOOL)result validate:(NSString *_Nullable)validate message:(NSString *_Nullable)message captchaType:(NSString *_Nullable)captchaType;
+- (void)verifyCodeValidateFinish:(BOOL)result validate:(NSString *_Nullable)validate message:(NSString *_Nullable)message;
+
+/**
+ * 完成验证之后的回调
+ *
+ * @param result 验证结果 BOOL:YES/NO
+ * @param validate 二次校验数据，如果验证结果为false，validate返回空
+ * @param message 结果描述信息
+ * @param extraData 额外更多信息
+ *
+ */
+- (void)verifyCodeValidateFinish:(BOOL)result validate:(NSString *_Nullable)validate message:(NSString *_Nullable)message extraData:(NSDictionary *_Nullable)extraData;
 
 
 /**
@@ -339,7 +349,15 @@ NSData *imageData = [NSData dataWithContentsOfFile:bundlePath];
 - (void)verifyCodeCloseWindow:(NTESVerifyCodeClose)close;
 
 ```
+#### extraData 参数说明
+
+| key           | value类型 | 解释                 |
+| ------------- | --------- | -------------------- |
+| captchaType   | NSString  | 验证码类型           |
+| errorValidate | NSString  | user参数验证失败原因 |
+
 ## 附录
+
 #### 错误码
 
 | code | 含义 |
