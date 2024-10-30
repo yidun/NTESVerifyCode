@@ -34,7 +34,7 @@
 <body>
   <div class="captcha__wrapper">
     <div class="captcha" id="captcha"></div>
-    <div class="log" id="debug"></div>
+    <div class="log" id="logContainer"></div>
   </div>
   <!-- <script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script> -->
 <script type="text/javascript">/******/ (function(modules) { // webpackBootstrap
@@ -87,11 +87,11 @@
 
 	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 
-	__webpack_require__(3);
-	__webpack_require__(5);
 	__webpack_require__(4);
+	__webpack_require__(6);
+	__webpack_require__(5);
 
-	var debugEl = document.getElementById('debug');
+	var logContainer = document.getElementById('logContainer');
 	var captchaEl = document.getElementById('captcha');
 	var FLOAT_MODE = 'float';
 	var BIND_MODE = 'bind';
@@ -115,10 +115,10 @@
 	window.popupCaptcha = popupCaptcha;
 
 	function log(str) {
-	  if (!debugMode) return;
+	  if (!logable) return;
 	  var p = document.createElement('p');
 	  p.appendChild(document.createTextNode(str));
-	  debugEl.insertBefore(p, debugEl.firstChild);
+	  logContainer.insertBefore(p, logContainer.firstChild);
 	}
 
 	function clickOutSide() {
@@ -213,6 +213,8 @@
 	      feedbackEnable = _navtiveOptions$feedb === undefined ? false : _navtiveOptions$feedb,
 	      _navtiveOptions$disab = navtiveOptions.disableFocusVisible,
 	      disableFocusVisible = _navtiveOptions$disab === undefined ? false : _navtiveOptions$disab,
+	      _navtiveOptions$disab2 = navtiveOptions.disableReport,
+	      disableReport = _navtiveOptions$disab2 === undefined ? false : _navtiveOptions$disab2,
 	      _navtiveOptions$defau = navtiveOptions.defaultFallback,
 	      defaultFallback = _navtiveOptions$defau === undefined ? true : _navtiveOptions$defau,
 	      _navtiveOptions$error = navtiveOptions.errorFallbackCount,
@@ -227,7 +229,7 @@
 	      refreshInterval = _navtiveOptions$refre === undefined ? 300 : _navtiveOptions$refre,
 	      _navtiveOptions$prelo = navtiveOptions.preload,
 	      preload = _navtiveOptions$prelo === undefined ? false : _navtiveOptions$prelo,
-	      restOptions = _objectWithoutProperties(navtiveOptions, ['feedbackEnable', 'disableFocusVisible', 'defaultFallback', 'errorFallbackCount', 'os', 'mobileTimeout', 'closeEnable', 'refreshInterval', 'preload']);
+	      restOptions = _objectWithoutProperties(navtiveOptions, ['feedbackEnable', 'disableFocusVisible', 'disableReport', 'defaultFallback', 'errorFallbackCount', 'os', 'mobileTimeout', 'closeEnable', 'refreshInterval', 'preload']);
 
 	  return Object.assign(defaultOptions, _extends({}, restOptions, {
 	    runEnv: RUN_ENV[os.toUpperCase()],
@@ -236,6 +238,7 @@
 	    errorFallbackCount: parseInt(errorFallbackCount),
 	    feedbackEnable: feedbackEnable === 'true',
 	    disableFocusVisible: disableFocusVisible === 'true',
+	    disableReport: disableReport === 'true',
 	    os: os,
 	    mobileTimeout: parseInt(mobileTimeout),
 	    timeout: parseInt(mobileTimeout),
@@ -322,7 +325,7 @@
 	var navtiveOptions = getArgs();
 	var options = mergeOptionsDeep(defaultOptions, navtiveOptions);
 	var CLIENT_ENV = ['iOS', 'android', 'harmonyos'];
-	var debugMode = navtiveOptions.debug === 'true';
+	var logable = navtiveOptions.logable === 'true';
 	var preload = options.preload;
 
 	if (preload) {
@@ -359,7 +362,7 @@
 	  captchaEl.style.padding = '18px';
 	}
 
-	if (debugMode) {
+	if (logable) {
 	  log('window.screen.width = ' + window.screen.width);
 	  log('body.width = ' + document.body.offsetWidth);
 	  log('captchaEl.width = ' + captchaEl.offsetWidth);
@@ -416,7 +419,9 @@
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(3);
 
 	exports.CAPTCHA_TYPE = {
 	  JIGSAW: 2,
@@ -470,7 +475,7 @@
 	  LARGE: 20
 	};
 
-	exports.SAMPLE_NUM = 50;
+	exports.SAMPLE_NUM = _.msie() < 8 ? 30 : 50;
 	exports.BIGGER_SAMPLE_NUM = 100;
 
 	exports.DEVICE = {
@@ -490,7 +495,8 @@
 	  'light': 'NECaptcha_theme_light',
 	  'dark': 'NECaptcha_theme_dark',
 	  'plugins': 'NECaptcha_plugin',
-	  'watchman': 'initCaptchaWatchman'
+	  'watchman': 'initCaptchaWatchman',
+	  'irisk': 'createNECaptchaGuardian'
 	};
 
 	exports.FEEDBACK_URL = 'https://support.dun.163.com/feedback/captcha';
@@ -501,7 +507,8 @@
 	  IOS: 30,
 	  MINIPROGRAM: 40,
 	  JUMPER_MINI_PROGRAM: 50,
-	  QUICKAPP: 60
+	  QUICKAPP: 60,
+	  HARMONYOS: 35
 	};
 
 	exports.CLOSE_SOURCE = {
@@ -514,6 +521,10 @@
 
 	exports.POPUP_PRELOAD_SHIFTING_CLASS = 'yidun_popup--shifting';
 	exports.CLASSIC_WRAPPER_PRELOAD_SHIFTING_CLASS = 'yidun_classic-wrapper--shifting';
+
+	// 禁用启用开关
+	exports.ENABLE = 1;
+	exports.DISABLE = 2;
 
 /***/ }),
 /* 2 */
@@ -873,10 +884,222 @@
 
 	  return initNECaptchaWithFallback;
 	});
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6), __webpack_require__(7)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(8)(module)))
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+	var o2str = {}.toString;
+	var dtKey = 'ujg3ps2znyw';
+
+	var _ = {
+	  slice: function slice(obj, start, end) {
+	    var res = [];
+	    for (var i = start || 0, len = end || obj.length; i < len; i++) {
+	      res.push(i);
+	    }
+	    return res;
+	  },
+	  // uniqueArr: function (arr) {
+	  //   var obj = {}
+	  //   for (var i = 0, len = arr.length; i < len; i++) {
+	  //     var key = arr[i]
+	  //     if (!obj[key]) {
+	  //       obj[key] = true
+	  //     }
+	  //   }
+	  //   return Object.keys(obj)
+	  // },
+	  getObjKey: function getObjKey(obj, val) {
+	    for (var key in obj) {
+	      if (obj.hasOwnProperty(key)) {
+	        if (obj[key] === val) return key;
+	      }
+	    }
+	  },
+	  // beacuse slice and toLowerCase is expensive.
+	  // we handle undefined and null in another way (by regularjs/util.js)
+	  typeOf: function typeOf(o) {
+	    return o == null ? String(o) : o2str.call(o).slice(8, -1).toLowerCase();
+	  },
+	  isFn: function isFn(o) {
+	    return typeof o === 'function';
+	  },
+	  log: function log(type, msg) {
+	    var types = ['info', 'warn', 'error'];
+	    if (typeof type !== 'string' || !~types.indexOf(type)) {
+	      _.error('util.log(type, msg): "type" must be one string of ' + types.toString());
+	      return;
+	    }
+	    console && console[type]('[NECaptcha] ' + msg);
+	  },
+	  warn: function warn(msg) {
+	    _.log('warn', msg);
+	  },
+	  error: function error(msg) {
+	    _.log('error', msg);
+	  },
+	  assert: function assert(condition, msg) {
+	    if (!condition) throw new Error('[NECaptcha] ' + msg);
+	  },
+	  msie: function msie() {
+	    var ua = navigator.userAgent;
+	    var msie = parseInt((/msie (\d+)/.exec(ua.toLowerCase()) || [])[1]);
+	    if (isNaN(msie)) {
+	      msie = parseInt((/trident\/.*; rv:(\d+)/.exec(ua.toLowerCase()) || [])[1]);
+	    }
+	    return msie;
+	  },
+	  now: function now() {
+	    return new Date().getTime();
+	  },
+	  getIn: function getIn(o, path, expectedReturn) {
+	    if (Object.prototype.toString.call(o) !== '[object Object]') return expectedReturn;
+	    if (typeof path === 'string') {
+	      path = path.split('.');
+	    }
+	    for (var i = 0, l = path.length; i < l; i++) {
+	      var key = path[i];
+	      if (i < l - 1 && !o[key]) {
+	        return expectedReturn;
+	      }
+	      o = o[key];
+	    }
+	    return o;
+	  },
+	  raf: function raf(cb) {
+	    var raf = window.requestAnimationFrame || window.webkitRequestAnimationFrame || function (cb) {
+	      window.setTimeout(cb, 16);
+	    };
+	    raf(cb);
+	  },
+	  nextFrame: function nextFrame(fn) {
+	    _.raf(function () {
+	      return _.raf(fn);
+	    });
+	  },
+	  sample: function sample(xs, count) {
+	    var xlen = xs.length;
+	    if (xlen <= count) {
+	      return xs;
+	    } else {
+	      var ys = [];
+	      var ylen = 0;
+	      for (var i = 0; i < xlen; i++) {
+	        if (i >= ylen * (xlen - 1) / (count - 1)) {
+	          ys.push(xs[i]);
+	          ylen += 1;
+	        }
+	      }
+	      return ys;
+	    }
+	  },
+	  template: function template(str, data) {
+	    /* eslint-disable */
+	    var escapeRegExp = function escapeRegExp(s) {
+	      return s.replace(/([.*+?^${}()|[\]\/\\])/g, "\\$1");
+	    };
+	    var templateSettings = {
+	      start: "<%",
+	      end: "%>",
+	      interpolate: /<%=(.+?)%>/g
+	    };
+	    var c = templateSettings;
+	    var endMatch = new RegExp("'(?=[^" + c.end.substr(0, 1) + "]*" + escapeRegExp(c.end) + ")", "g");
+	    var fn = new Function("obj", "var p=[],print=function(){p.push.apply(p,arguments);};" + "with(obj){p.push('" + str.replace(/[\r\t\n]/g, " ").replace(endMatch, "\t").split("'").join("\\'").split("\t").join("'").replace(c.interpolate, "',$1,'").split(c.start).join("');").split(c.end).join("p.push('") + "');}return p.join('');");
+	    return data ? fn(data) : fn;
+	    /* eslint-enable */
+	  },
+	  uuid: function uuid(len, radix) {
+	    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+	    var uuid = [];
+	    var i = void 0;
+	    radix = radix || chars.length;
+
+	    if (len) {
+	      // Compact form
+	      for (i = 0; i < len; i++) {
+	        uuid[i] = chars[0 | Math.random() * radix];
+	      }
+	    } else {
+	      // rfc4122, version 4 form
+	      var r = void 0;
+
+	      // rfc4122 requires these characters
+	      uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+	      uuid[14] = '4';
+
+	      // Fill in random data.  At i==19 set the high bits of clock sequence as
+	      // per rfc4122, sec. 4.1.5
+	      for (i = 0; i < 36; i++) {
+	        if (!uuid[i]) {
+	          r = 0 | Math.random() * 16;
+	          uuid[i] = chars[i === 19 ? r & 0x3 | 0x8 : r];
+	        }
+	      }
+	    }
+
+	    return uuid.join('');
+	  },
+	  reverse: function reverse(arr) {
+	    if (Array.isArray(arr)) return arr.reverse();
+	    if (_.typeOf(arr) === 'string') return arr.split('').reverse().join('');
+	    return arr;
+	  },
+	  encodeUrlParams: function encodeUrlParams(params) {
+	    var result = [];
+	    for (var key in params) {
+	      if (params.hasOwnProperty(key)) {
+	        result.push(window.encodeURIComponent(key) + '=' + window.encodeURIComponent(params[key]));
+	      }
+	    }
+	    return result.join('&');
+	  },
+	  adsorb: function adsorb(n, lower, upper) {
+	    if (lower === undefined || lower === null || upper === undefined || upper === null) {
+	      return n;
+	    }
+	    return Math.max(Math.min(n, upper), lower);
+	  },
+	  // 传入二维数组，按照某一列去重
+	  unique2DArray: function unique2DArray(arr) {
+	    var judgeIndex = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+	    if (!Array.isArray(arr)) return arr;
+	    var obj = {};
+	    var res = [];
+	    for (var i = 0, len = arr.length; i < len; i++) {
+	      var key = arr[i][judgeIndex];
+	      if (key !== null && key !== undefined && !obj[key]) {
+	        obj[key] = true;
+	        res.push(arr[i]);
+	      }
+	    }
+	    return res;
+	  },
+	  setDeviceToken: function setDeviceToken(token) {
+	    try {
+	      // 在 safari 浏览器下，隐身模式无法使用该方法
+	      window.localStorage.setItem(dtKey, token);
+	    } catch (err) {
+	      return null;
+	    }
+	  },
+	  getDeviceToken: function getDeviceToken() {
+	    try {
+	      var token = window.localStorage.getItem(dtKey);
+	      return token;
+	    } catch (err) {
+	      return null;
+	    }
+	  }
+	};
+
+	module.exports = _;
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports) {
 
 	if (typeof Object.assign !== 'function') {
@@ -901,7 +1124,7 @@
 	}
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports) {
 
 	// Production steps of ECMA-262, Edition 5, 15.4.4.14
@@ -970,7 +1193,7 @@
 	}
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 	// 实现 ECMA-262, Edition 5, 15.4.4.19
@@ -1030,7 +1253,7 @@
 	}
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports) {
 
 	// shim for using process in browser
@@ -1220,7 +1443,7 @@
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports) {
 
 	module.exports = function(module) {

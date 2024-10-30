@@ -280,6 +280,18 @@ typedef NS_ENUM(NSInteger, NTESUserInterfaceStyle) {
 @property(nonatomic) NSString *apiServer;
 
 /**
+ *  @abstract   风控相关环境配置，业务方可根据需要配置irApiServer，不传默认使用易盾服务配置
+ *
+*/
+@property(nonatomic) NSString *irApiServer;
+
+/**
+* @abstract    禁用上报开关
+* 默认 false，设置为 true，上报关闭
+*/
+@property(nonatomic) BOOL disableReport;
+
+/**
  * @abstract    验证码私有化环境配置，业务方可根据需要配置协议类型，选项见枚举定义。
  *              不传默认https协议。
  */
