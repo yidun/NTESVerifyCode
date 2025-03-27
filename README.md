@@ -191,6 +191,12 @@ self.manager = [NTESVerifyCodeManager getInstance];
 | ipv6 | BOOL | 否 |NO| 默认为 no，传 yes 表示支持ipv6网络。|
 | refreshInterval | NSUInteger | 否 |NO| 滑动拼图、智能无感知、短信、语音验证失败后，停留时间。如果需要延长错误提示时间（为了让用户感知到）可自定义配置，单位为 ms|
 | allowUploadSystemInfo | BOOL | 否 |YES| 验证码私有化环境配置，是否允许采集系统信息,默认为YES采集，设置NO不采集。|
+| refreshInterval | NSUInteger | 否 |NO| 滑动拼图、智能无感知、短信、语音验证失败后，停留时间。如果需要延长错误提示时间（为了让用户感知到）可自定义配置，单位为 ms|
+| allowUploadSystemInfo | BOOL | 否 |YES| 验证码私有化环境配置，是否允许采集系统信息,默认为YES采集，设置NO不采集。|
+| user | NSString | 否 |无| 用户标识 |
+| captchaType | enum | 否 |无| 验证码类型，可以修改业务id默认的类型 |
+
+
 ### 弹出验证码
 
 #### 代码说明：
@@ -497,6 +503,22 @@ NSData *imageData = [NSData dataWithContentsOfFile:bundlePath];
 | 巴西葡语  | NTESVerifyCodeLangPTBR   |
 | 拉美西语  | NTESVerifyCodeLangESLA   |
 
+#### NTESCaptchaType 枚举值说明
+
+| 枚举值       | 解释           |
+| ------------ | -------------- |
+| NTESCaptchaTypeJIGSAW       | 滑动拼图验证码 |
+| NTESCaptchaTypPoint        | 文字点选验证码 |
+| NTESCaptchaTypeSms          | 短信上行验证码 |
+| NTESCaptchaTypeIntellisense | 智能无感知     |
+| NTESCaptchaTypeAvoid        | 躲避障碍验证码 |
+| NTESCaptchaTypeIconPoint   | 图标点选验证码 |
+| NTESCaptchaTypeWordGourp   | 词组验证码     |
+| NTESCaptchaTypeInference    | 图片推理验证码 |
+| NTESCaptchaTypeWordOrder   | 语序选词验证码 |
+| NTESCaptchaTypeSpace        | 空间推理验证码 |
+| NTESCaptchaTypeVoice        | 语音验证码     |
+
 #### 验证码类型
 
 | 返回值       | 解释           |
@@ -512,3 +534,4 @@ NSData *imageData = [NSData dataWithContentsOfFile:bundlePath];
 | word_order   | 语序选词验证码 |
 | space        | 空间推理验证码 |
 | voice        | 语音验证码     |
+
