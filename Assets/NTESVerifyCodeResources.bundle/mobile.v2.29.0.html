@@ -209,7 +209,9 @@
 	}
 
 	function mergeOptionsDeep(defaultOptions, navtiveOptions) {
-	  var _navtiveOptions$feedb = navtiveOptions.feedbackEnable,
+	  var _navtiveOptions$captc = navtiveOptions.captchaType,
+	      captchaType = _navtiveOptions$captc === undefined ? CAPTCHA_TYPE.JIGSAW : _navtiveOptions$captc,
+	      _navtiveOptions$feedb = navtiveOptions.feedbackEnable,
 	      feedbackEnable = _navtiveOptions$feedb === undefined ? false : _navtiveOptions$feedb,
 	      _navtiveOptions$disab = navtiveOptions.disableFocusVisible,
 	      disableFocusVisible = _navtiveOptions$disab === undefined ? false : _navtiveOptions$disab,
@@ -229,9 +231,10 @@
 	      refreshInterval = _navtiveOptions$refre === undefined ? 300 : _navtiveOptions$refre,
 	      _navtiveOptions$prelo = navtiveOptions.preload,
 	      preload = _navtiveOptions$prelo === undefined ? false : _navtiveOptions$prelo,
-	      restOptions = _objectWithoutProperties(navtiveOptions, ['feedbackEnable', 'disableFocusVisible', 'disableReport', 'defaultFallback', 'errorFallbackCount', 'os', 'mobileTimeout', 'closeEnable', 'refreshInterval', 'preload']);
+	      restOptions = _objectWithoutProperties(navtiveOptions, ['captchaType', 'feedbackEnable', 'disableFocusVisible', 'disableReport', 'defaultFallback', 'errorFallbackCount', 'os', 'mobileTimeout', 'closeEnable', 'refreshInterval', 'preload']);
 
 	  return Object.assign(defaultOptions, _extends({}, restOptions, {
+	    captchaType: parseInt(captchaType),
 	    runEnv: RUN_ENV[os.toUpperCase()],
 	    defaultFallback: defaultFallback !== 'false',
 	    closeEnable: closeEnable !== 'false',
@@ -251,6 +254,7 @@
 	var previousData = {};
 	var defaultOptions = {
 	  element: captchaEl,
+	  captchaType: CAPTCHA_TYPE.JIGSAW,
 	  mode: POPUP_MODE,
 	  closeEnable: true,
 	  width: 330,
@@ -320,6 +324,13 @@
 	    isShow ? postMessageBridge('onFloatHeightChange', data) : setTimeout(function () {
 	      return postMessageBridge('onFloatHeightChange', data);
 	    }, 10);
+	  },
+	  onResource: function onResource() {
+	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	      args[_key] = arguments[_key];
+	    }
+
+	    postMessageBridge.apply(undefined, ['onResource'].concat(args));
 	  }
 	};
 	var navtiveOptions = getArgs();
