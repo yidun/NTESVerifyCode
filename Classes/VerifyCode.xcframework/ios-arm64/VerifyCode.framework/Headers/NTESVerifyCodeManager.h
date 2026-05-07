@@ -10,6 +10,8 @@
 #import <UIKit/UIKit.h>
 #import "NTESVerifyCodeStyleConfig.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  * @abstract    设置验证码语言类型
  */
@@ -213,6 +215,12 @@ typedef NS_ENUM(NSInteger, NTESCaptchaType) {
  */
 - (void)verifyCodeCloseWindow:(NTESVerifyCodeClose)close;
 
+/**
+ * 验证码加载日志
+ * @param log 日志信息
+ */
+- (void)verifyCodeLoadWithLog:(NSString *)log;
+
 @end
 
 
@@ -230,21 +238,21 @@ typedef NS_ENUM(NSInteger, NTESCaptchaType) {
  *              (1)如果不传递或者传递为CGRectNull(CGRectZero),则使用默认值:topView的居中显示,宽度为屏幕宽度的4/5,高度:view宽度/2.0 + 65
  *              (2)如果传递,则frame的宽度至少为270;高度至少为:宽度/2.0 + 65.
  */
-@property(nonatomic) CGRect            frame;
+@property(nonatomic, assign) CGRect            frame;
 
 /**
  * @abstract    验证码图片背景的透明度
  *
  * @说明         范围:0~1，0表示全透明，1表示不透明。默认值:0.3
  */
-@property(nonatomic) CGFloat           alpha;
+@property(nonatomic, assign) CGFloat           alpha;
 
 /**
  * @abstract    验证码图片背景的颜色
  *
  * @说明         默认值:黑色
  */
-@property(nonatomic) UIColor           *color;
+@property(nonatomic, strong) UIColor           *color;
 
 /**
  * @abstract    验证码语言选项
@@ -252,7 +260,7 @@ typedef NS_ENUM(NSInteger, NTESCaptchaType) {
  * @说明         验证码枚举类型NTESVerifyCodeLang，可选范围见枚举定义。
  *              不传默认中文。
  */
-@property(nonatomic) NTESVerifyCodeLang    lang;
+@property(nonatomic, assign) NTESVerifyCodeLang    lang;
 
 /**
  * @abstract    验证码适老化
@@ -260,7 +268,7 @@ typedef NS_ENUM(NSInteger, NTESCaptchaType) {
  * @说明          验证码适老化枚举类型NTESVerifyCodeFontSize，可选范围见枚举定义。
  *              不传默认小号字体。
  */
-@property(nonatomic) NTESVerifyCodeFontSize fontSize;
+@property(nonatomic, assign) NTESVerifyCodeFontSize fontSize;
 
 /**
  * @abstract    是否开启哀悼主题
@@ -268,130 +276,140 @@ typedef NS_ENUM(NSInteger, NTESCaptchaType) {
  * @说明         默认值:不开启
  */
 
-@property(nonatomic)BOOL mournTheme;
+@property(nonatomic, assign)BOOL mournTheme;
 
 /**
  * @abstract    明亮暗黑主题
  */
 
-@property(nonatomic)NTESUserInterfaceStyle userInterfaceStyle;
+@property(nonatomic, assign)NTESUserInterfaceStyle userInterfaceStyle;
 
 /**
  * @abstract    验证码滑块icon url，不传则使用易盾默认滑块显示。
  */
-@property(nonatomic) NSString *slideIconURL;
+@property(nonatomic, copy) NSString *slideIconURL;
 
 /**
  * @abstract    验证码验证成功的滑块icon url，不传则使用易盾默认滑块显示。
  */
-@property(nonatomic) NSString *slideIconSuccessURL;
+@property(nonatomic, copy) NSString *slideIconSuccessURL;
 
 /**
  * @abstract    验证码滑块滑动过程中的icon url，不传则使用易盾默认滑块显示。
  */
-@property(nonatomic) NSString *slideIconMovingURL;
+@property(nonatomic, copy) NSString *slideIconMovingURL;
 
 /**
  * @abstract    验证码验证失败的滑块icon url，不传则使用易盾默认滑块显示。
  */
-@property(nonatomic) NSString *slideIconErrorURL;
+@property(nonatomic, copy) NSString *slideIconErrorURL;
 
 /**
  * @abstract    验证码私有化环境配置，业务方可根据需要配置staticServer，不传默认使用易盾服务配置。
  */
-@property(nonatomic) NSString *staticServer;
+@property(nonatomic, copy) NSString *staticServer;
 
 /**
  * @abstract    验证码私有化环境配置，业务方可根据需要配置apiServer，不传默认使用易盾服务配置。
  */
-@property(nonatomic) NSString *apiServer;
+@property(nonatomic, copy) NSString *apiServer;
 
 /**
  *  @abstract   风控相关环境配置，业务方可根据需要配置irApiServer，不传默认使用易盾服务配置
  *
 */
-@property(nonatomic) NSString *irApiServer;
+@property(nonatomic, copy) NSString *irApiServer;
 
 /**
 * @abstract    禁用上报开关
 * 默认 false，设置为 true，上报关闭
 */
-@property(nonatomic) BOOL disableReport;
+@property(nonatomic, assign) BOOL disableReport;
 
 /**
  * @abstract    验证码私有化环境配置，业务方可根据需要配置协议类型，选项见枚举定义。
  *              不传默认https协议。
  */
-@property(nonatomic) NTESVerifyCodeProtocol protocol;
+@property(nonatomic, assign) NTESVerifyCodeProtocol protocol;
 
 /**
  * @abstract    设置极端情况下，当验证码服务不可用时，是否开启降级方案。
  *              默认开启，当触发降级开关时，将直接通过验证，进入下一步。
  */
-@property(nonatomic) BOOL openFallBack;
+@property(nonatomic, assign) BOOL openFallBack;
 
 /**
  * @abstract    设置发生第fallBackCount次错误时，将触发降级。取值范围 >=1
  *              默认设置为3次，第三次服务器发生错误时，触发降级，直接通过验证。
  */
-@property(nonatomic) NSUInteger fallBackCount;
+@property(nonatomic, assign) NSUInteger fallBackCount;
 
 /**
  * @abstract   验证码ipv6配置。
  *             默认为 no，传 yes 表示支持ipv6网络。
  */
-@property(nonatomic) BOOL ipv6;
+@property(nonatomic, assign) BOOL ipv6;
 
 /**
  * @abstract   反作弊相关环境配置，业务方可根据需要配置wmConfigServer，不传默认使用易盾服务配置
  *
  */
-@property(nonatomic) NSString *wmConfigServer;
+@property(nonatomic, copy) NSString *wmConfigServer;
 
 /**
  * @abstract   反作弊相关环境配置，业务方可根据需要配置wmApiServer，不传默认使用易盾服务配置
  *
  */
-@property(nonatomic) NSString *wmApiServer;
+@property(nonatomic, copy) NSString *wmApiServer;
 
 /**
  *  @abstract   反作弊相关环境配置，业务方可根据需要配置wmStaticServer，不传默认使用易盾服务配置
  *
 */
-@property(nonatomic) NSString *wmStaticServer;
+@property (nonatomic, copy) NSString *wmStaticServer;
 
 /**
 * @abstract    是否隐藏关闭按钮
 *              默认不隐藏，设置为YES隐藏，NO不隐藏
 */
-@property(nonatomic) BOOL closeButtonHidden;
+@property (nonatomic, assign) BOOL closeButtonHidden;
 
 /**
  * @abstract    点击背景是否可以关闭验证码视图
  *              默认可以关闭。
  */
-@property(nonatomic) BOOL shouldCloseByTouchBackground;
+@property (nonatomic, assign) BOOL shouldCloseByTouchBackground;
 
 /**
 * @abstract  是否显示验证码内的关闭按钮
 *              默认不显示，设置为YES显示，NO隐藏
 */
-@property(nonatomic) BOOL innerCloseButtonShow;
+@property (nonatomic, assign) BOOL innerCloseButtonShow;
 
 /**
  extraData透传业务数据
  */
-@property (nonatomic) NSString *extraData;
+@property (nonatomic, copy) NSString *extraData;
 
 /**
  user 透传业务数据
  */
-@property (nonatomic) NSString *user;
+@property (nonatomic, copy) NSString *user;
+
+/**
+ ufp 透传业务数据
+ */
+@property (nonatomic, copy) NSString *ufp;
+
+/**
+ 设置 mobile 资源远程地址
+ */
+@property (nonatomic, copy) NSString *mobileUrl;
 
 /**
  captchaType 验证码类型
  */
-@property (nonatomic) NTESCaptchaType captchaType;
+@property (nonatomic, assign) NTESCaptchaType captchaType;
 
 // 设置验证码方向,验证码不会跟随设备旋转而旋转。
 @property(nonatomic, assign)NTESDeviceOrientation deviceOrientation;
@@ -523,3 +541,5 @@ typedef NS_ENUM(NSInteger, NTESCaptchaType) {
 - (NSString *_Nullable)getSDKVersion;
 
 @end
+
+NS_ASSUME_NONNULL_END
