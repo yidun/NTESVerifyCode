@@ -94,6 +94,8 @@ typedef NS_ENUM(NSInteger, NTESVerifyCodeLang) {
     NTESVerifyCodeLangSV,     // 瑞典语
     NTESVerifyCodeLangPTBR,   // 巴西葡语
     NTESVerifyCodeLangESLA,   // 拉美西语
+    NTESVerifyCodeLangYUECN,  // 繁体广东话
+    NTESVerifyCodeLangMO,     // 繁体澳门
 };
 
 /**
