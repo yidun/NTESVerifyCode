@@ -16,5 +16,5 @@ FOUNDATION_EXPORT const unsigned char NTESVerifyCodeVersionString[];
 
 // In this header, you should import all the public headers of your framework using statements like #import <NTESVerifyCode/PublicHeader.h>
 
-#import "NTESVerifyCodeManager.h"
-#import "NTESVerifyCodeStyleConfig.h"
+#import <VerifyCode/NTESVerifyCodeManager.h>
+#import <VerifyCode/NTESVerifyCodeStyleConfig.h>

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "NTESVerifyCodeStyleConfig.h"
+#import <VerifyCode/NTESVerifyCodeStyleConfig.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
