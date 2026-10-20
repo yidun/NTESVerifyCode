@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -209,9 +209,7 @@
 	}
 
 	function mergeOptionsDeep(defaultOptions, navtiveOptions) {
-	  var _navtiveOptions$captc = navtiveOptions.captchaType,
-	      captchaType = _navtiveOptions$captc === undefined ? CAPTCHA_TYPE.JIGSAW : _navtiveOptions$captc,
-	      _navtiveOptions$feedb = navtiveOptions.feedbackEnable,
+	  var _navtiveOptions$feedb = navtiveOptions.feedbackEnable,
 	      feedbackEnable = _navtiveOptions$feedb === undefined ? false : _navtiveOptions$feedb,
 	      _navtiveOptions$disab = navtiveOptions.disableFocusVisible,
 	      disableFocusVisible = _navtiveOptions$disab === undefined ? false : _navtiveOptions$disab,
@@ -231,10 +229,9 @@
 	      refreshInterval = _navtiveOptions$refre === undefined ? 300 : _navtiveOptions$refre,
 	      _navtiveOptions$prelo = navtiveOptions.preload,
 	      preload = _navtiveOptions$prelo === undefined ? false : _navtiveOptions$prelo,
-	      restOptions = _objectWithoutProperties(navtiveOptions, ['captchaType', 'feedbackEnable', 'disableFocusVisible', 'disableReport', 'defaultFallback', 'errorFallbackCount', 'os', 'mobileTimeout', 'closeEnable', 'refreshInterval', 'preload']);
+	      restOptions = _objectWithoutProperties(navtiveOptions, ['feedbackEnable', 'disableFocusVisible', 'disableReport', 'defaultFallback', 'errorFallbackCount', 'os', 'mobileTimeout', 'closeEnable', 'refreshInterval', 'preload']);
 
 	  return Object.assign(defaultOptions, _extends({}, restOptions, {
-	    captchaType: parseInt(captchaType),
 	    runEnv: RUN_ENV[os.toUpperCase()],
 	    defaultFallback: defaultFallback !== 'false',
 	    closeEnable: closeEnable !== 'false',
@@ -254,7 +251,6 @@
 	var previousData = {};
 	var defaultOptions = {
 	  element: captchaEl,
-	  captchaType: CAPTCHA_TYPE.JIGSAW,
 	  mode: POPUP_MODE,
 	  closeEnable: true,
 	  width: 330,
@@ -263,7 +259,7 @@
 	  feedbackEnable: false,
 	  runEnv: '',
 	  defaultFallback: true,
-	  staticServer: isDev ? 'localhost:9000' : undefined,
+	  staticServer: isDev ? window.location.hostname + ':9000' : undefined,
 	  smsNewVersion: 2, // 版本 2 以后的移动端短信上行点击发送直接跳转到短信界面
 	  disableFocusVisible: false,
 	  onVerify: function onVerify(err, ret) {
@@ -324,13 +320,6 @@
 	    isShow ? postMessageBridge('onFloatHeightChange', data) : setTimeout(function () {
 	      return postMessageBridge('onFloatHeightChange', data);
 	    }, 10);
-	  },
-	  onResource: function onResource() {
-	    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	      args[_key] = arguments[_key];
-	    }
-
-	    postMessageBridge.apply(undefined, ['onResource'].concat(args));
 	  }
 	};
 	var navtiveOptions = getArgs();
@@ -526,9 +515,13 @@
 	  USER: 1, // 用户关闭
 	  PROCESS: 2, // 流程关闭
 	  CLOSE: 3 // close方法调用关闭
-	};
 
-	exports.IV_VERSION = 4;
+
+	  /**
+	   * 5: 支持设置短信验证码的等待时间
+	   * @type {number}
+	   */
+	};exports.IV_VERSION = 5;
 
 	exports.POPUP_PRELOAD_SHIFTING_CLASS = 'yidun_popup--shifting';
 	exports.CLASSIC_WRAPPER_PRELOAD_SHIFTING_CLASS = 'yidun_classic-wrapper--shifting';
